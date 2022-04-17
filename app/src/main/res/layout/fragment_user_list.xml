@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.github_user_listing.UserListFragment">
 
-    <View android:layout_width="0.5dp"
+    <View
+        android:id="@+id/focusable_view"
+        android:layout_width="0.5dp"
         android:layout_height="0.5dp"
-        android:focusableInTouchMode="true"
-        android:id="@+id/focusable_view">
-    </View>
+        android:focusableInTouchMode="true"></View>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerUserList"
         android:layout_width="match_parent"
@@ -20,4 +20,4 @@
         tools:listitem="@layout/user_list_item_view" />
 
 
-    </FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

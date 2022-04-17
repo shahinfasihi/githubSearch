@@ -21,6 +21,11 @@ class UserListViewModel @Inject constructor(private val repository: GithubReposi
 
     private var searchJob: Job? = null
 
+    init {
+        state.value = state.value?.copy(searchQuery = "payConiq")
+        getUserList()
+    }
+
     fun onEvent(event: UserListEvent) {
         when (event) {
             is UserListEvent.Refresh -> {
