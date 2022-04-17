@@ -16,7 +16,8 @@
         <ImageView
             android:id="@+id/imgUser"
             android:layout_width="match_parent"
-            android:layout_height="360dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
             android:layout_margin="0dp"
             android:adjustViewBounds="true"
             android:padding="0dp"
@@ -27,7 +28,8 @@
         <LinearLayout
             android:id="@+id/container1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
             android:orientation="vertical"
             android:padding="10dp">
 

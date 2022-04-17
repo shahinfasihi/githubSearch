@@ -23,9 +23,4 @@
             app:argType="string"
             android:defaultValue="shahinfasihi" />
     </fragment>
-    <fragment
-        android:id="@+id/blankFragment"
-        android:name="com.shahinfasihi.githubsearch.presentation.github_user_listing.BlankFragment"
-        android:label="fragment_blank"
-        tools:layout="@layout/fragment_blank" />
 </navigation>
