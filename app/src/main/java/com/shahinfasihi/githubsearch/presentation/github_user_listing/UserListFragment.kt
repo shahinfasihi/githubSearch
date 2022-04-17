@@ -100,8 +100,7 @@ class UserListFragment : Fragment(), UserListAdapter.Interaction {
             searchView.isSubmitButtonEnabled = true
         }
         val searchPlate = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
-        //just for showing a page with data
-        viewModel.onEvent(UserListEvent.OnSearchQueryChange("payconiq"))
+
         viewModel.state.value?.let { state ->
             if (state.searchQuery.isNotBlank()) {
                 searchPlate.setText(state.searchQuery)
