@@ -14,8 +14,11 @@ i think it is good for small project but according to my research in bigger proj
 layer will be mess so needs to shrink the project to features then use the current architecture
 
 last note :
-git revoked the token because i pushed the code and it was in it so i will send the token by email
+1.git revoked the token because i pushed the code and it was in it so i will send the token by email
 there is no need for token it will work but for test more than 5 times in a minute with one IP you
-will need that com.shahinfasihi.githubsearch.data.remote.GithubApi => TOKEN
+will need that com.shahinfasihi.githubsearch.data.remote.GithubApi => TOKEN ------- 2.i start with "
+EntireSln" branch and it is a little different with the main after ending the job the i start to
+engineering the branch as you said in pdf that you will control the process so i didn't delete the "
+entireSln" branch but it shouldn't be there
 
 thanks a lot for your time
