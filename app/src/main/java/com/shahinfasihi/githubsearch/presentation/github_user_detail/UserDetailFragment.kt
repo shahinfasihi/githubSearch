@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.shahinfasihi.githubsearch.R
 import com.shahinfasihi.githubsearch.databinding.FragmentUserDetailBinding
@@ -24,6 +26,10 @@ class UserDetailFragment : Fragment() {
     companion object {
         const val USERNAME = "username"
     }
+
+    private val requestOptions = RequestOptions
+        .placeholderOf(R.drawable.default_image)
+        .error(R.drawable.default_image)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +59,7 @@ class UserDetailFragment : Fragment() {
 //        Toast.makeText(context, username, Toast.LENGTH_LONG).show()
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
+            //TODO : control error
             if (state.isLoading == true) {
 //                Snackbar.make(view, "Loading", Snackbar.LENGTH_LONG).show()
             } else {
@@ -63,7 +70,11 @@ class UserDetailFragment : Fragment() {
                 val following =
                     getString(R.string.userDetail_following, state.user?.following.toString())
 
-                Glide.with(view).load(state.user?.avatarUrl).into(binding.imgUser)
+                Glide.with(view)
+                    .setDefaultRequestOptions(requestOptions)
+                    .load(state.user?.avatarUrl)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(binding.imgUser)
                 binding.txtUsername.setText(username)
                 binding.txtfollower.setText(followers)
                 binding.txtfollowing.setText(following)

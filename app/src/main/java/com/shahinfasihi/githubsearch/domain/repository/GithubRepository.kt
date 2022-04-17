@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface GithubRepository {
 
-    suspend fun getUserList(
-        query: String
+    fun getUserList(
+        query: String,
+        page: Int
     ): Flow<Resource<UserList>>
 
     fun getUser(

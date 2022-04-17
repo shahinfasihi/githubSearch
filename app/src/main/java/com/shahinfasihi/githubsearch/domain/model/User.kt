@@ -24,7 +24,7 @@ data class User(
     val blog: String? = null,
     val location: String? = null,
     val email: String? = null,
-    val hireable: String? = null,
+    val hireable: Boolean? = null,
     val bio: String? = null,
     val twitterUsername: String? = null,
     val publicRepos: Int? = null,

@@ -10,7 +10,8 @@ interface GithubApi {
     @GET("search/users")
     suspend fun searchUsers(
 //        @Header("Authorization") authorization: String = TOKEN,
-        @Query("q") query: String
+        @Query("q") query: String,
+        @Query("page") page: Int
 
     ): UserListDto
 
@@ -23,7 +24,7 @@ interface GithubApi {
     companion object {
         // usually you don't need authorization when calling the api
         // the key just generated for testing more than 5 time with same IP_Address
-        const val TOKEN = "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"
+        const val TOKEN = "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"
         const val BASE_URL = "https://api.github.com/"
     }
 }

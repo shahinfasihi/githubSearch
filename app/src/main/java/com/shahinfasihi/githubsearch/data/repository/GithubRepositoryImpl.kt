@@ -18,11 +18,11 @@ import javax.inject.Singleton
 @Singleton
 class GithubRepositoryImpl @Inject constructor(private val api: GithubApi) : GithubRepository {
 
-    override suspend fun getUserList(query: String): Flow<Resource<UserList>> {
+    override fun getUserList(query: String, page: Int): Flow<Resource<UserList>> {
         return flow {
             try {
                 emit(Resource.Loading(true))
-                val result = api.searchUsers(query)
+                val result = api.searchUsers(query, page)
                 emit(Resource.Success(result.toUserList()))
             } catch (e: IOException) {
                 e.printStackTrace()

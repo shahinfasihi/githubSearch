@@ -3,14 +3,18 @@ package com.shahinfasihi.githubsearch.presentation.github_user_listing
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shahinfasihi.githubsearch.util.Resource
 import com.shahinfasihi.githubsearch.domain.repository.GithubRepository
+import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +22,7 @@ import javax.inject.Inject
 class UserListViewModel @Inject constructor(private val repository: GithubRepository) :
     ViewModel() {
 
-    var state by mutableStateOf(UserListState())
+    val state: MutableLiveData<UserListState> = MutableLiveData(UserListState())
 
     private var searchJob: Job? = null
 
@@ -28,7 +32,7 @@ class UserListViewModel @Inject constructor(private val repository: GithubReposi
                 getUserList()
             }
             is UserListEvent.OnSearchQueryChange -> {
-                state = state.copy(searchQuery = event.query, isLoading = true)
+                state.value = state.value?.copy(searchQuery = event.query, isLoading = true)
                 searchJob?.cancel()
                 searchJob = viewModelScope.launch {
                     //to avoid sending multiple requests
@@ -36,28 +40,46 @@ class UserListViewModel @Inject constructor(private val repository: GithubReposi
                     getUserList()
                 }
             }
-        }
-    }
-
-    private fun getUserList(query: String = state.searchQuery.lowercase()) {
-        viewModelScope.launch {
-            repository.getUserList(query).collect { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        result.data?.let { userList ->
-                            state = state.copy(users = userList)
-                        }
-                    }
-                    is Resource.Error -> {
-                        state = state.copy(error = result.message)
-                    }
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = result.isLoading)
-                    }
-                }
+            is UserListEvent.NextPage -> {
+                nextPage()
             }
         }
     }
 
+    private fun nextPage() {
+        incrementPageNumber()
+        getUserList()
+    }
 
+    private fun incrementPageNumber() {
+        state.value?.let { state ->
+            this.state.value = state.copy(page = state.page + 1)
+        }
+    }
+
+    private fun getUserList() {
+        state.value?.let { state ->
+            repository.getUserList(state.searchQuery, state.page).onEach { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        resource.data?.let { userList ->
+                            this.state.value = state.copy(
+                                users = userList,
+                                isLoading = false,
+                                page = state.page
+                            )
+                        }
+                    }
+                    is Resource.Loading -> {
+                        this.state.value = state.copy(isLoading = resource.isLoading)
+                    }
+                    is Resource.Error -> {
+                        this.state.value = state.copy(error = resource.message, isLoading = false)
+                    }
+                }
+
+            }.launchIn(viewModelScope)
+        }
+
+    }
 }

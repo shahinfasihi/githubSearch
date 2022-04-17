@@ -39,7 +39,7 @@ fun UserDto.toUser(): User {
         blog = blog ?: "",
         location = location ?: "",
         email = email ?: "",
-        hireable = hireable ?: "",
+        hireable = hireable ?: false,
         bio = bio ?: "",
         twitterUsername = twitterUsername ?: "",
         publicRepos = publicRepos ?: 0,

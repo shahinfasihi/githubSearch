@@ -26,7 +26,7 @@ data class UserDto(
     @field:Json(name = "blog") val blog: String? = null,
     @field:Json(name = "location") val location: String? = null,
     @field:Json(name = "email") val email: String? = null,
-    @field:Json(name = "hireable") val hireable: String? = null,
+    @field:Json(name = "hireable") val hireable: Boolean? = null,
     @field:Json(name = "bio") val bio: String? = null,
     @field:Json(name = "twitter_username") val twitterUsername: String? = null,
     @field:Json(name = "public_repos") val publicRepos: Int? = null,

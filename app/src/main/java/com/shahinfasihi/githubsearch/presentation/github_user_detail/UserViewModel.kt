@@ -34,11 +34,11 @@ class UserViewModel @Inject constructor(
 
     private fun getUser(username: String) {
         state.value?.let { state ->
-            repository.getUser(username).onEach { result ->
+            repository.getUser(username).onEach { resource ->
 //                this.state.value = state.copy(isLoading = true)
-                when (result) {
+                when (resource) {
                     is Resource.Success -> {
-                        result.data?.let { user ->
+                        resource.data?.let { user ->
                             this.state.value = state.copy(
                                 user = user,
                                 isLoading = false
@@ -46,10 +46,10 @@ class UserViewModel @Inject constructor(
                         }
                     }
                     is Resource.Loading -> {
-                        this.state.value = state.copy(isLoading = result.isLoading)
+                        this.state.value = state.copy(isLoading = resource.isLoading)
                     }
                     is Resource.Error -> {
-                        this.state.value = state.copy(error = result.message, isLoading = false)
+                        this.state.value = state.copy(error = resource.message, isLoading = false)
                     }
                 }
 

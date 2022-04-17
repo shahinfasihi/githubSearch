@@ -7,5 +7,6 @@ data class UserListState(
     val isLoading: Boolean? = false,
     val isRefreshing: Boolean? = false,
     val searchQuery: String = "",
-    val error: String? = ""
+    val error: String? = "",
+    val page: Int = 1,
 )

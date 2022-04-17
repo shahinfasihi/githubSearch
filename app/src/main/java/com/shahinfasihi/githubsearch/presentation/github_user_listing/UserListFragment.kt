@@ -1,21 +1,39 @@
 package com.shahinfasihi.githubsearch.presentation.github_user_listing
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.shahinfasihi.githubsearch.R
 import com.shahinfasihi.githubsearch.databinding.FragmentUserListBinding
+import com.shahinfasihi.githubsearch.domain.model.User
 import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserDetailFragment
+import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserDetailFragmentArgs
+import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserViewModel
+import com.shahinfasihi.githubsearch.presentation.util.TopSpacingItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
 
 @AndroidEntryPoint
-class UserListFragment : Fragment() {
+class UserListFragment : Fragment(), UserListAdapter.Interaction {
 
+    private val viewModel: UserListViewModel by viewModels()
+    private lateinit var searchView: SearchView
+    private var recyclerAdapter: UserListAdapter? = null
+    private lateinit var menu: Menu
 
     private var _binding: FragmentUserListBinding? = null
     private val binding get() = _binding!!
@@ -28,17 +46,116 @@ class UserListFragment : Fragment() {
         _binding = FragmentUserListBinding.inflate(layoutInflater)
         return binding.root
 
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+        setHasOptionsMenu(true)
 
-        binding.btn.setOnClickListener {
-            //move inside the adapter
-            val action = UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(username = "shahinfasihi")
-            view.findNavController().navigate(action)
+        initRecyclerView()
+        subscribeObservers()
+
+        //move inside the adapter
+//            val action = UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(username = "shahinfasihi")
+//            view.findNavController().navigate(action)
+
+    }
+
+    private fun subscribeObservers() {
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            //TODO : Control error
+            if (state.isLoading == true) {
+//                Snackbar.make(view, "Loading", Snackbar.LENGTH_LONG).show()
+            } else {
+                recyclerAdapter?.apply {
+                    submitList(userList = state.users?.userList)
+                }
+            }
+        }
+
+    }
+
+
+    private fun initRecyclerView() {
+        binding.recyclerUserList.apply {
+            layoutManager = LinearLayoutManager(this@UserListFragment.context)
+            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            removeItemDecoration(topSpacingDecorator)
+            addItemDecoration(topSpacingDecorator)
+
+            recyclerAdapter = UserListAdapter(this@UserListFragment)
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val lastPosition = layoutManager.findLastVisibleItemPosition()
+                    if (
+                        lastPosition == recyclerAdapter?.itemCount?.minus(1)
+                        && viewModel.state.value?.isLoading == false
+                    ) {
+                        viewModel.onEvent(UserListEvent.NextPage)
+                    }
+                }
+            })
+            adapter = recyclerAdapter
+        }
+    }
+
+    private fun initSearchView() {
+        activity?.apply {
+            val searchManager: SearchManager =
+                getSystemService(Context.SEARCH_SERVICE) as SearchManager
+            searchView = menu.findItem(R.id.action_search).actionView as SearchView
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            searchView.maxWidth = Integer.MAX_VALUE
+            searchView.setIconifiedByDefault(true)
+            searchView.isSubmitButtonEnabled = true
+        }
+        val searchPlate = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+//        searchPlate.setText("shahin")
+        viewModel.state.value?.let { state ->
+            if (state.searchQuery.isNotBlank()) {
+                searchPlate.setText(state.searchQuery)
+                searchView.isIconified = false
+                binding.focusableView.requestFocus()
+            }
+        }
+        searchPlate.setOnEditorActionListener { v, actionId, event ->
+
+            if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
+                || actionId == EditorInfo.IME_ACTION_SEARCH
+            ) {
+                val searchQuery = v.text.toString()
+                viewModel.onEvent(UserListEvent.OnSearchQueryChange(searchQuery))
+            }
+            true
+        }
+
+        val searchButton = searchView.findViewById(androidx.appcompat.R.id.search_go_btn) as View
+        searchButton.setOnClickListener {
+            val searchQuery = searchPlate.text.toString()
+            viewModel.onEvent(UserListEvent.OnSearchQueryChange(searchQuery))
+        }
+//        Toast.makeText(context, searchPlate.text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        this.menu = menu
+        inflater.inflate(R.menu.search_menu, this.menu)
+        initSearchView()
+    }
+
+    override fun onItemSelected(position: Int, item: User) {
+        try {
+            viewModel.state.value?.let { _ ->
+                val action =
+                    UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(username = item.login.toString())
+                findNavController().navigate(action)
+            } ?: throw Exception("User Null")
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -46,4 +163,6 @@ class UserListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
