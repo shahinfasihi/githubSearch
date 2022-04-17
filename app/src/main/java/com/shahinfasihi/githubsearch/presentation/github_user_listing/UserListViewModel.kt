@@ -1,17 +1,12 @@
 package com.shahinfasihi.githubsearch.presentation.github_user_listing
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shahinfasihi.githubsearch.util.Resource
 import com.shahinfasihi.githubsearch.domain.repository.GithubRepository
-import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

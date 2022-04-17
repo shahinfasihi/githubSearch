@@ -6,7 +6,6 @@ import retrofit2.http.*
 
 interface GithubApi {
 
-    //TODO : i should add pagination as a param to control the list size
     @GET("search/users")
     suspend fun searchUsers(
 //        @Header("Authorization") authorization: String = TOKEN,

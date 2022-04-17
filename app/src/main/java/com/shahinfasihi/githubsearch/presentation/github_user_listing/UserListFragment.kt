@@ -3,26 +3,19 @@ package com.shahinfasihi.githubsearch.presentation.github_user_listing
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.shahinfasihi.githubsearch.R
 import com.shahinfasihi.githubsearch.databinding.FragmentUserListBinding
 import com.shahinfasihi.githubsearch.domain.model.User
-import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserDetailFragment
-import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserDetailFragmentArgs
-import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserViewModel
 import com.shahinfasihi.githubsearch.presentation.util.TopSpacingItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
@@ -55,18 +48,12 @@ class UserListFragment : Fragment(), UserListAdapter.Interaction {
 
         initRecyclerView()
         subscribeObservers()
-
-        //move inside the adapter
-//            val action = UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(username = "shahinfasihi")
-//            view.findNavController().navigate(action)
-
     }
 
     private fun subscribeObservers() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             //TODO : Control error
             if (state.isLoading == true) {
-//                Snackbar.make(view, "Loading", Snackbar.LENGTH_LONG).show()
             } else {
                 recyclerAdapter?.apply {
                     submitList(userList = state.users?.userList)
@@ -113,7 +100,8 @@ class UserListFragment : Fragment(), UserListAdapter.Interaction {
             searchView.isSubmitButtonEnabled = true
         }
         val searchPlate = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
-//        searchPlate.setText("shahin")
+        //just for showing a page with data
+        viewModel.onEvent(UserListEvent.OnSearchQueryChange("payconiq"))
         viewModel.state.value?.let { state ->
             if (state.searchQuery.isNotBlank()) {
                 searchPlate.setText(state.searchQuery)
@@ -137,7 +125,6 @@ class UserListFragment : Fragment(), UserListAdapter.Interaction {
             val searchQuery = searchPlate.text.toString()
             viewModel.onEvent(UserListEvent.OnSearchQueryChange(searchQuery))
         }
-//        Toast.makeText(context, searchPlate.text, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

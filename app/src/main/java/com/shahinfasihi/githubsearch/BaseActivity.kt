@@ -3,9 +3,8 @@ package com.shahinfasihi.githubsearch
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import com.shahinfasihi.githubsearch.presentation.github_user_listing.UserListViewModel
-import javax.inject.Inject
 
+// I wrote this code before but don't work on some circumstances so i need that to be removed
 abstract class BaseActivity : AppCompatActivity(),
     UICommunicationListener {
 
@@ -20,3 +19,4 @@ abstract class BaseActivity : AppCompatActivity(),
     }
 
 }
+

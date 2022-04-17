@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.snackbar.Snackbar
 import com.shahinfasihi.githubsearch.R
 import com.shahinfasihi.githubsearch.databinding.FragmentUserDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,12 +55,9 @@ class UserDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
 
-//        Toast.makeText(context, username, Toast.LENGTH_LONG).show()
-
         viewModel.state.observe(viewLifecycleOwner) { state ->
             //TODO : control error
             if (state.isLoading == true) {
-//                Snackbar.make(view, "Loading", Snackbar.LENGTH_LONG).show()
             } else {
                 binding.progressLayout.visibility = View.GONE
                 val username = getString(R.string.userDetail_username, state.user?.login)
