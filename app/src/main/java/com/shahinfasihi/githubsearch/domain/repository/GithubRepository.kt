@@ -11,7 +11,7 @@ interface GithubRepository {
         query: String
     ): Flow<Resource<UserList>>
 
-    suspend fun getUser(
+    fun getUser(
         username: String
     ): Flow<Resource<User>>
 }

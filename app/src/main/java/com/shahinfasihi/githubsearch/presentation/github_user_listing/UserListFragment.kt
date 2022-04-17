@@ -11,7 +11,9 @@ import androidx.navigation.findNavController
 import com.shahinfasihi.githubsearch.R
 import com.shahinfasihi.githubsearch.databinding.FragmentUserListBinding
 import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserDetailFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UserListFragment : Fragment() {
 
 
@@ -38,5 +40,10 @@ class UserListFragment : Fragment() {
             val action = UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(username = "shahinfasihi")
             view.findNavController().navigate(action)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

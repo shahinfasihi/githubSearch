@@ -35,7 +35,7 @@ class GithubRepositoryImpl @Inject constructor(private val api: GithubApi) : Git
         }
     }
 
-    override suspend fun getUser(username: String): Flow<Resource<User>> {
+    override fun getUser(username: String): Flow<Resource<User>> {
         return flow {
             try {
                 emit(Resource.Loading(true))

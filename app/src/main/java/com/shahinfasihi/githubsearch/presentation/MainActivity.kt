@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.shahinfasihi.githubsearch.BaseActivity
 import com.shahinfasihi.githubsearch.R
 import com.shahinfasihi.githubsearch.databinding.ActivityMainBinding
+import com.shahinfasihi.githubsearch.presentation.github_user_detail.UserViewModel
 import com.shahinfasihi.githubsearch.presentation.github_user_listing.UserListEvent
 import com.shahinfasihi.githubsearch.presentation.github_user_listing.UserListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,8 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
-    private val viewModel: UserListViewModel by viewModels()
+//    private val viewModel: UserListViewModel by viewModels()
+//    private val viewModel: UserViewModel by viewModels()
 
     override fun displayProgressBar(isLoading: Boolean) {
         TODO("Not yet implemented")
