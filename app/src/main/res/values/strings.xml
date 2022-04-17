@@ -3,4 +3,9 @@
     <string name="search">Search</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="userDetail_username">Username: %S</string>
+    <string name="userDetail_followers">Followers: %S</string>
+    <string name="userDetail_following">Following: %S</string>
+
 </resources>

@@ -1,15 +1,15 @@
 package com.shahinfasihi.githubsearch.presentation.github_user_detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.shahinfasihi.githubsearch.R
 import com.shahinfasihi.githubsearch.databinding.FragmentUserDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,15 +54,21 @@ class UserDetailFragment : Fragment() {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             if (state.isLoading == true) {
-                Snackbar.make(view, "Loading", Snackbar.LENGTH_LONG).show()
+//                Snackbar.make(view, "Loading", Snackbar.LENGTH_LONG).show()
             } else {
-                Log.d("Kronos", state.user.toString())
-                Snackbar.make(view, state.user?.login.toString(), Snackbar.LENGTH_LONG)
-                    .show()
+                binding.progressLayout.visibility = View.GONE
+                val username = getString(R.string.userDetail_username, state.user?.login)
+                val followers =
+                    getString(R.string.userDetail_followers, state.user?.followers.toString())
+                val following =
+                    getString(R.string.userDetail_following, state.user?.following.toString())
+
+                Glide.with(view).load(state.user?.avatarUrl).into(binding.imgUser)
+                binding.txtUsername.setText(username)
+                binding.txtfollower.setText(followers)
+                binding.txtfollowing.setText(following)
             }
         }
-
-
     }
 
     override fun onDestroyView() {
