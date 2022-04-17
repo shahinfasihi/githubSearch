@@ -37,7 +37,7 @@ class UserListViewModel @Inject constructor(private val repository: GithubReposi
                 searchJob = viewModelScope.launch {
                     //to avoid sending multiple requests
                     delay(500)
-                    getUserList()
+                    newSearch()
                 }
             }
             is UserListEvent.NextPage -> {
@@ -49,6 +49,22 @@ class UserListViewModel @Inject constructor(private val repository: GithubReposi
     private fun nextPage() {
         incrementPageNumber()
         getUserList()
+    }
+
+    private fun newSearch() {
+        resetPage()
+        clearList()
+        getUserList()
+    }
+
+    private fun clearList() {
+        state.value?.let { state ->
+            this.state.value = state.copy(users = null)
+        }
+    }
+
+    private fun resetPage() {
+        state.value = state.value?.copy(page = 1)
     }
 
     private fun incrementPageNumber() {

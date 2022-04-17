@@ -9,11 +9,6 @@ import javax.inject.Inject
 abstract class BaseActivity : AppCompatActivity(),
     UICommunicationListener {
 
-    //can inject or control the auth or session before control any thing
-    // but we don't need that for now
-//    @Inject
-//    lateinit var viewModel: UserListViewModel
-
     override fun hideSoftKeyboard() {
         if (currentFocus != null) {
             val inputMethodManager = getSystemService(
