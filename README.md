@@ -7,7 +7,7 @@ could use just one model instead of two (no need for {userList}) i thought maybe
 fields ...
 
 remained task :
-test on flows -> it is new to me i am trying to learn it i will try to update the code on april 19
+test on flows -> it is new to me i am trying to learn it i will try to update the code on april  (done)
 
 project structure :
 i think it is good for small project but according to my research in bigger project presentation
